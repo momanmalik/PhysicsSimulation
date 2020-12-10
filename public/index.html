@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Physics Simulation</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/master.css">
+</head>
+
+<body>
+  <div class="navbar navbar-expand-lg navbar-light">
+    <h1 class="navbar-brand">
+      Gravity Simulation
+    </h1>
+  </div>
+  <div class="container">
+    <div class="controller">
+      <h4>Settings</h4>
+      <form class="" action="/" method="post">
+        <div class="row">
+          <div class="col-sm-6">
+            <label>Number of Balls</label>
+          </div>
+          <div class="col-sm-6">
+            <input type="range" name="numberOfBalls" step="1" min="1" max="100" id="numberOfBalls">
+            <span class="font-weight-bold text-primary ml-2 valueSpan2" id="numberOfBallsLabel"></span>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>Acceleration due to Gravity</label>
+          </div>
+          <div class="col-sm-6">
+            <input type="range" name="acceleration" step="0.01" min="0" max="10" id="acceleration">
+            <span class="font-weight-bold text-primary ml-2 valueSpan2" id="accelerationLabel"> </span><span class="font-weight-bold text-primary ml-2">px/s<sup>2</sup></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>Velocity</label>
+          </div>
+          <div class="col-sm-6">
+            <input type="range" name="velocity" step="0.01" min="0.0" max="10" id="velocity">
+            <span class="font-weight-bold text-primary ml-2 valueSpan2" id="velocityLabel"></span><span class="font-weight-bold text-primary ml-2">px/s</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>Friction</label>
+          </div>
+          <div class="col-sm-6">
+            <input type="range" name="friction" step="0.01" min="0" max="1" id="friction">
+            <span class="font-weight-bold text-primary ml-2 valueSpan2" id="frictionLabel"></span><span class="font-weight-bold text-primary ml-2"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+          </div>
+          <div class="col-sm-6">
+            <button class="btn btn-dark" type=submit id="custom">Submit</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+          </div>
+          <div class="col-sm-6">
+            <button class="btn btn-dark" type=submit onclick="" id="default" formaction="/default">Default Settings</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  <div class="about">
+    <h4>About</h4>
+    <p class="lead">
+      I'm Moman Malik, a second year computer science student at Wilfrid Laurier University. I made this website to
+      demonstrate my ability to create physics simulations and animations using HTML5, CSS and Javascript. This was made with the help of a Youtube video "How to Code - Gravity".
+      However, tweaks were made and the code was adjusted to allow the user to pick their own settings. This gave me a deep understanding of the foundations of HTML5 canvas and Javascript animations.
+      <br></br>
+      Balls are all assumed to
+      be the same size and mass. Balls are drawn at random locations on the canvas from which they then
+      experience freefall with the forces specified by the user.
+      <br></br>
+    </p>
+      <h4>Next Steps</h4>
+    <p class="lead">
+      If this project were to be expanded upon, a scale with metric units would be implemented. The acceleration, velocity and friction
+      are all approximate values due to the refresh rate of HTML5 canvas animation function. To make this simulation accurate will require more
+      research on HTML5 canvas and methods of conversion between canvas and metric units. Different sizes and masses for objects can also be implemented.
+
+      <br></br>
+      This simulation could serve as a useful tool to help students visualize the effect of forces on simple objects.
+      <br></br>
+      Made using HTML5, JavaScript, Express.js, Node.js, EJS and styled using CSS and Bootstrap.
+
+    </p>
+  </div>
+</div>
+
+  <footer class="footer">
+    <div class="container">
+      Moman Malik © 2020
+    </div>
+  </footer>
+  <script>
+    var numOfBallSlider = document.getElementById("numberOfBalls");
+    var velocitySlider = document.getElementById("velocity");
+    var accelerationSlider = document.getElementById("acceleration");
+    var frictionSlider = document.getElementById("friction");
+    var sliders = [numOfBallSlider, velocitySlider, accelerationSlider, frictionSlider]
+
+    var numberOfBallsLabel = document.getElementById("numberOfBallsLabel");
+    var velocityLabel = document.getElementById("velocityLabel");
+    var accelerationLabel = document.getElementById("accelerationLabel");
+    var frictionLabel = document.getElementById("frictionLabel");
+    var labels = [numberOfBallsLabel, velocityLabel, accelerationLabel, frictionLabel]
+
+    for (var i = 0; i < sliders.length; i++) {
+      labels[i].innerHTML = sliders[i].value;
+      if (i===2 || i === 3){
+        labels[i].innerHTML = sliders[i].value * 60;
+      }
+    }
+    sliders[0].oninput = function() {
+      labels[0].innerHTML = this.value;
+    }
+    sliders[1].oninput = function() {
+      labels[1].innerHTML = (this.value * 60).toFixed(2);
+    }
+    sliders[2].oninput = function() {
+      labels[2].innerHTML = (this.value * 60).toFixed(2);
+    }
+    sliders[3].oninput = function() {
+      labels[3].innerHTML = this.value;
+    }
+  </script>
+</body>
+
+</html>

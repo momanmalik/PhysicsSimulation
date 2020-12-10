@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Simulation</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/master.css">
+
+</head>
+
+<body>
+    <button class="btn btn-primary settings-btn" id="replay">
+      Replay
+    </button>
+    <form class="" action="/playground" method="post">
+    <button type="submit" class="btn btn-dark settings-btn">
+      Settings
+    </button>
+  <canvas></canvas>
+
+
+  </form>
+
+  <script type="module">
+
+    var set = '<%-JSON.stringify(settings)%>';
+    var mySettings = JSON.parse(set)
+
+
+    if (mySettings.num === 0 || mySettings.num === null){
+      mySettings = {
+          num: 50,
+          velocity: 2,
+          acceleration: 1,
+          friction: 0.9
+        }
+    }
+
+    console.log("this is the set", mySettings)
+    function randomIntFromRange(min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+
+    const canvas = document.querySelector('canvas')
+    const c = canvas.getContext('2d')
+
+    const colors = [
+      "#d9ecf2",
+      "#f56a79",
+      "#ff414d",
+      "#1aa6b7"
+    ]
+
+    function randomColor(colors) {
+      return colors[Math.floor(Math.random() * colors.length)]
+    }
+
+    canvas.width = innerWidth - 100
+    canvas.height = innerHeight - 200
+
+    console.log(innerWidth)
+    console.log(innerHeight)
+
+    const mouse = {
+      x: innerWidth / 2,
+      y: innerHeight / 2
+    }
+
+    console.log("wtf" , mySettings)
+
+
+    var gravity = mySettings.acceleration;
+    var friction = 1 - mySettings.friction;
+    // Event Listeners
+    addEventListener('mousemove', (event) => {
+      mouse.x = event.clientX
+      mouse.y = event.clientY
+    })
+
+    addEventListener('resize', () => {
+      canvas.width = innerWidth - 100
+      canvas.height = innerHeight  - 100
+
+      init()
+    })
+
+    // Objects
+    class Ball {
+      constructor(x, y,dx, dy, radius, color) {
+        this.x = x
+        this.y = y
+        this.dy = dy;
+        this.dx = dx;
+
+        this.radius = radius
+        this.color = color
+      }
+
+      draw() {
+        c.beginPath()
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        c.fillStyle = this.color
+        c.fill()
+        c.stroke()
+        c.closePath()
+      }
+
+      update() {
+        if (this.y + this.radius + this.dy> canvas.height){
+          this.dy = -this.dy * friction;
+          this.dx *= friction
+        } else{
+          this.dy += gravity;
+        }
+
+        if (this.x + this.radius + this.dx > canvas.width || this.x - this.radius < 0){
+          this.dx = -this.dx * friction
+          this.dy *= friction;
+        }
+
+        this.x += this.dx;
+        this.y += this.dy;
+        this.draw()
+      }
+    }
+
+    // Implementation
+    var ball;
+    var ballArray = [];
+
+    function init() {
+      ballArray = []
+      var radius = 30;
+      console.log(mySettings.num)
+      for (var i=0; i < mySettings.num; i++){
+        var x = randomIntFromRange(radius , canvas.width - radius)
+        var y = randomIntFromRange(0, canvas.height - radius)
+        var dx = mySettings.velocity;
+
+        ballArray.push(new Ball(x,y,dx,2,radius,randomColor(colors)))
+      }
+      console.log(ballArray)
+    }
+
+    // Animation Loop
+    function animate() {
+      requestAnimationFrame(animate)
+      c.clearRect(0, 0, canvas.width, canvas.height)
+
+      ballArray.forEach(function(ball){ball.update()})
+      // objects.forEach(object => {
+      //  object.update()
+      // })
+
+    }
+
+    init()
+    animate()
+    window.onload = function() {
+      document.getElementById("replay").onclick = function() {
+        console.log("i got pressed")
+        init();
+      }
+    }
+  </script>
+
+</body>
+
+</html>
